@@ -2,7 +2,10 @@
 
 if( isset( $_SESSION [ 'id' ] ) ) {
 	// Get input
-	$id = $_SESSION[ 'id' ];
+	$id = filter_var( $_SESSION[ 'id' ], FILTER_VALIDATE_INT );
+	if( $id === false || $id < 1 ) {
+		$id = 0;
+	}
 
 	switch ($_DVWA['SQLI_DB']) {
 		case MYSQL:
@@ -20,7 +23,7 @@ if( isset( $_SESSION [ 'id' ] ) ) {
 				$html .= "<pre>ID: {$id}<br />First name: {$first}<br />Surname: {$last}</pre>";
 			}
 
-			((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);		
+			((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
 			break;
 		case SQLITE:
 			global $sqlite_db_connection;

@@ -1,21 +1,19 @@
 <?php
 
-if (array_key_exists ("redirect", $_GET) && $_GET['redirect'] != "") {
-	if (preg_match ("/http:\/\/|https:\/\//i", $_GET['redirect'])) {
-		http_response_code (500);
-		?>
-		<p>Absolute URLs not allowed.</p>
-		<?php
-		exit;
-	} else {
-		header ("location: " . $_GET['redirect']);
-		exit;
-	}
+$target = $_GET[ 'redirect' ] ?? '';
+$allowed_targets = array(
+	'info.php?id=1',
+	'info.php?id=2',
+);
+
+if( in_array( $target, $allowed_targets, true ) ) {
+	header( 'Location: ' . $target );
+	exit;
 }
 
-http_response_code (500);
+http_response_code( 400 );
 ?>
-<p>Missing redirect target.</p>
+<p>Invalid or missing redirect target.</p>
 <?php
 exit;
 ?>

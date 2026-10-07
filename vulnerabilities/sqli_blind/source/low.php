@@ -2,7 +2,10 @@
 
 if( isset( $_GET[ 'Submit' ] ) ) {
 	// Get input
-	$id = $_GET[ 'id' ];
+	$id = filter_var( $_GET[ 'id' ] ?? null, FILTER_VALIDATE_INT );
+	if( $id === false || $id < 1 ) {
+		$id = 0;
+	}
 	$exists = false;
 
 	switch ($_DVWA['SQLI_DB']) {

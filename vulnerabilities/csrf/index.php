@@ -35,7 +35,7 @@ $testCredentials = "
  <button onclick=\"testFunct()\">Test Credentials</button><br /><br />
  <script>
 function testFunct() {
-  window.open(\"" . DVWA_WEB_PAGE_TO_ROOT . "vulnerabilities/csrf/test_credentials.php\", \"_blank\", 
+  window.open(\"" . DVWA_WEB_PAGE_TO_ROOT . "vulnerabilities/csrf/test_credentials.php\", \"_blank\",
   \"toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=600,height=400\");
 }
 </script>
@@ -47,13 +47,13 @@ $page[ 'body' ] .= "
 
 	<div class=\"vulnerable_code_area\">
 		<h3>Change your admin password:</h3>
-		<br /> 
+		<br />
 		<div id=\"test_credentials\">
 			".$testCredentials ."
 		</div><br />
 		<form action=\"#\" method=\"GET\">";
 
-if( $vulnerabilityFile == 'impossible.php' ) {
+if( true ) {
 	$page[ 'body' ] .= "
 			Current password:<br />
 			<input type=\"password\" AUTOCOMPLETE=\"off\" name=\"password_current\"><br />";
@@ -67,7 +67,7 @@ $page[ 'body' ] .= "
 			<br />
 			<input type=\"submit\" value=\"Change\" name=\"Change\">\n";
 
-if( $vulnerabilityFile == 'high.php' || $vulnerabilityFile == 'impossible.php' )
+if( true )
 	$page[ 'body' ] .= "			" . tokenField();
 
 $page[ 'body' ] .= "

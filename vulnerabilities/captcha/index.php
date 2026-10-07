@@ -59,7 +59,7 @@ $page[ 'body' ] .= ">
 
 			<input type=\"hidden\" name=\"step\" value=\"1\" />\n";
 
-if( $vulnerabilityFile == 'impossible.php' ) {
+if( true ) {
 	$page[ 'body' ] .= "
 			Current password:<br />
 			<input type=\"password\" AUTOCOMPLETE=\"off\" name=\"password_current\"><br />";
@@ -74,7 +74,7 @@ $page[ 'body' ] .= "			New password:<br />
 if( $vulnerabilityFile == 'high.php' )
 	$page[ 'body' ] .= "\n\n			<!-- **DEV NOTE**   Response: 'hidd3n_valu3'   &&   User-Agent: 'reCAPTCHA'   **/DEV NOTE** -->\n";
 
-if( $vulnerabilityFile == 'high.php' || $vulnerabilityFile == 'impossible.php' )
+if( true )
 	$page[ 'body' ] .= "\n			" . tokenField();
 
 $page[ 'body' ] .= "

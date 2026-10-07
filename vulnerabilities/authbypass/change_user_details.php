@@ -4,11 +4,8 @@ require_once DVWA_WEB_PAGE_TO_ROOT . 'dvwa/includes/dvwaPage.inc.php';
 
 dvwaDatabaseConnect();
 
-/*
-On impossible only the admin is allowed to retrieve the data.
-*/
-
-if (dvwaSecurityLevelGet() == "impossible" && dvwaCurrentUser() != "admin") {
+if (dvwaCurrentUser() != "admin") {
+	http_response_code(403);
 	print json_encode (array ("result" => "fail", "error" => "Access denied"));
 	exit;
 }
@@ -25,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST") {
 try {
 	$json = file_get_contents('php://input');
 	$data = json_decode($json);
-	if (is_null ($data)) {
+	if (is_null ($data) || !isset($data->id, $data->first_name, $data->surname)) {
 		$result = array (
 							"result" => "fail",
 							"error" => 'Invalid format, expecting "{id: {user ID}, first_name: "{first name}", surname: "{surname}"}'
@@ -44,8 +41,18 @@ try {
 	exit;
 }
 
-$query = "UPDATE users SET first_name = '" . $data->first_name . "', last_name = '" .  $data->surname . "' where user_id = " . $data->id . "";
-$result = mysqli_query($GLOBALS["___mysqli_ston"],  $query ) or die( '<pre>' . ((is_object($GLOBALS["___mysqli_ston"])) ? mysqli_error($GLOBALS["___mysqli_ston"]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . '</pre>' );
+$id = filter_var($data->id, FILTER_VALIDATE_INT);
+if ($id === false || $id < 1 || !is_string($data->first_name) || !is_string($data->surname)) {
+	http_response_code(400);
+	print json_encode(array("result" => "fail", "error" => "Invalid user details"));
+	exit;
+}
+
+$query = "UPDATE users SET first_name = ?, last_name = ? WHERE user_id = ?";
+$stmt = mysqli_prepare($GLOBALS["___mysqli_ston"], $query);
+mysqli_stmt_bind_param($stmt, "ssi", $data->first_name, $data->surname, $id);
+mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
 
 print json_encode (array ("result" => "ok"));
 exit;

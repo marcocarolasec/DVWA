@@ -2,13 +2,14 @@
 
 if( isset( $_POST[ 'Submit' ]  ) ) {
 	// Get input
-	$id = $_POST[ 'id' ];
+	$id = filter_var( $_POST[ 'id' ] ?? null, FILTER_VALIDATE_INT );
+	if( $id === false || $id < 1 ) {
+		$id = 0;
+	}
 	$exists = false;
 
 	switch ($_DVWA['SQLI_DB']) {
 		case MYSQL:
-			$id = ((isset($GLOBALS["___mysqli_ston"]) && is_object($GLOBALS["___mysqli_ston"])) ? mysqli_real_escape_string($GLOBALS["___mysqli_ston"],  $id ) : ((trigger_error("[MySQLConverterToo] Fix the mysql_escape_string() call! This code does not work.", E_USER_ERROR)) ? "" : ""));
-
 			// Check database
 			$query  = "SELECT first_name, last_name FROM users WHERE user_id = $id;";
 			try {
@@ -26,11 +27,11 @@ if( isset( $_POST[ 'Submit' ]  ) ) {
 					$exists = false;
 				}
 			}
-			
+
 			break;
 		case SQLITE:
 			global $sqlite_db_connection;
-			
+
 			$query  = "SELECT first_name, last_name FROM users WHERE user_id = $id;";
 			try {
 				$results = $sqlite_db_connection->query($query);
