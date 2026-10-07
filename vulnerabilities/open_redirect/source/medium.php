@@ -1,13 +1,13 @@
 <?php
 
-$target = filter_input( INPUT_GET, 'redirect', FILTER_VALIDATE_INT );
+$target = $_GET[ 'redirect' ] ?? '';
 $allowed_targets = array(
-	1 => 'info.php?id=1',
-	2 => 'info.php?id=2',
+	'info.php?id=1',
+	'info.php?id=2',
 );
 
-if( $target !== false && isset( $allowed_targets[ $target ] ) ) {
-	header( 'Location: ' . $allowed_targets[ $target ] );
+if( is_string( $target ) && in_array( $target, $allowed_targets, true ) ) {
+	header( 'Location: ' . $target );
 	exit;
 }
 
