@@ -39,9 +39,9 @@ class HealthController
                 description: 'Successful operation.',
             ),
         ]
-    )   
+    )
     ]
-	
+
 	private function echo() {
 		$input = (array) json_decode(file_get_contents('php://input'), TRUE);
 		if (array_key_exists ("words", $input)) {
@@ -77,15 +77,21 @@ class HealthController
                 description: 'Successful operation.',
             ),
         ]
-    )   
+    )
     ]
-	
+
 	private function checkConnectivity() {
 		$input = (array) json_decode(file_get_contents('php://input'), TRUE);
 		if (array_key_exists ("target", $input)) {
 			$target = $input['target'];
 
-			exec ("ping -c 4 " . $target, $output, $ret_var);
+			if (!is_string($target) || filter_var($target, FILTER_VALIDATE_IP) === false) {
+				$response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+				$response['body'] = json_encode (array ("status" => "Invalid target"));
+				return $response;
+			}
+
+			exec ("ping -c 4 -- " . escapeshellarg($target), $output, $ret_var);
 
 			if ($ret_var == 0) {
 				$response['status_code_header'] = 'HTTP/1.1 200 OK';
@@ -112,9 +118,9 @@ class HealthController
                 description: 'Successful operation.',
             ),
         ]
-    )   
+    )
     ]
-	
+
 	private function getStatus() {
 		$response['status_code_header'] = 'HTTP/1.1 200 OK';
 		$response['body'] = json_encode (array ("status" => "OK"));
@@ -132,7 +138,7 @@ class HealthController
                 description: 'Successful operation.',
             ),
         ]
-    )   
+    )
     ]
 	private function ping() {
 		$response['status_code_header'] = 'HTTP/1.1 200 OK';
@@ -197,4 +203,3 @@ final class Words {
     #[OAT\Property(example: "Hello World")]
     public string $words;
 }
-

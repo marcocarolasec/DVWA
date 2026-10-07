@@ -36,26 +36,13 @@ final class User
 	}
 
 	public function toArray($version) {
-		switch ($version) {
-			case 1:
-				$a = array (
-					"id" => $this->id,
-					"name" => $this->name,
-					"level" => $this->level,
-					"password" => $this->password,
-				);
-				break;
-			default:
-			case 2:
-				$a = array (
-					"id" => $this->id,
-					"name" => $this->name,
-					"level" => $this->level,
-				);
-				break;
-		}
-
-		return $a;
+		// Password material is never part of a public API representation,
+		// including legacy versions.
+		return array (
+			"id" => $this->id,
+			"name" => $this->name,
+			"level" => $this->level,
+		);
 	}
 }
 

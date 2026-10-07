@@ -79,9 +79,9 @@ class UserController
                 description: 'User not found.',
             ),
         ]
-    )   
-    ]  
-	
+    )
+    ]
+
 	private function getUser($id)
 	{
 		if (!array_key_exists ($id, $this->data)) {
@@ -92,7 +92,7 @@ class UserController
 		$response['status_code_header'] = 'HTTP/1.1 200 OK';
 		$response['body'] = json_encode ($this->data[$id]->toArray($this->version));
 		return $response;
-	}	
+	}
 
     #[OAT\Get(
 		tags: ["user"],
@@ -109,8 +109,8 @@ class UserController
                 )
             ),
         ]
-    )   
-    ]  
+    )
+    ]
 
 	private function getAllUsers() {
 		$response['status_code_header'] = 'HTTP/1.1 200 OK';
@@ -148,8 +148,8 @@ class UserController
                 description: 'Invalid user object provided',
             ),
         ]
-    )   
-    ]  
+    )
+    ]
 
 	private function addUser()
 	{
@@ -202,9 +202,9 @@ class UserController
                 description: 'Invalid user object provided',
             ),
         ]
-    )   
-    ]  
-	
+    )
+    ]
+
 	private function updateUser($id)
 	{
 		if (!array_key_exists ($id, $this->data)) {
@@ -221,13 +221,12 @@ class UserController
 		if (array_key_exists ("name", $input)) {
 			$this->data[$id]->name = $input['name'];
 		}
-		if (array_key_exists ("level", $input)) {
-			$this->data[$id]->level = intval ($input['level']);
-		}
+		// Privilege level is not a user-editable field. Ignore any extra
+		// properties instead of allowing a mass-assignment escalation.
 		$response['status_code_header'] = 'HTTP/1.1 200 OK';
 		$response['body'] = json_encode ($this->data[$id]->toArray($this->version));
 		return $response;
-	}	
+	}
 
     #[OAT\Delete(
 		tags: ["user"],
@@ -247,9 +246,9 @@ class UserController
                 description: 'User not found',
             ),
         ]
-    )   
-    ]  
-	
+    )
+    ]
+
 	private function deleteUser($id) {
 		if (!array_key_exists ($id, $this->data)) {
 			$gc = new GenericController("notFound");
