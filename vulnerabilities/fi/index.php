@@ -31,9 +31,15 @@ switch( dvwaSecurityLevelGet() ) {
 
 require_once DVWA_WEB_PAGE_TO_ROOT . "vulnerabilities/fi/source/{$vulnerabilityFile}";
 
-// if( count( $_GET ) )
-if( isset( $file ) )
-	include( $file );
+if( isset( $file ) ) {
+	$include_root = realpath( __DIR__ );
+	$include_file = realpath( __DIR__ . DIRECTORY_SEPARATOR . $file );
+	if( $include_file === false || dirname( $include_file ) !== $include_root ) {
+		http_response_code( 400 );
+		exit( 'Invalid page.' );
+	}
+	include( $include_file );
+}
 else {
 	header( 'Location:?page=include.php' );
 	exit;

@@ -91,9 +91,11 @@ class HealthController
 				return $response;
 			}
 
-			exec ("ping -c 4 -- " . escapeshellarg($target), $output, $ret_var);
+			// Avoid invoking a shell for user-controlled connectivity checks.
+			$socket = @fsockopen($target, 80, $errorNumber, $errorMessage, 2);
 
-			if ($ret_var == 0) {
+			if (is_resource($socket)) {
+				fclose($socket);
 				$response['status_code_header'] = 'HTTP/1.1 200 OK';
 				$response['body'] = json_encode (array ("status" => "OK"));
 			} else {

@@ -1,13 +1,13 @@
 <?php
 
-if( isset( $_GET[ 'Change' ] ) ) {
+if( isset( $_POST[ 'Change' ] ) ) {
 	// Check Anti-CSRF token
 	checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
 
 	// Get input
-	$pass_curr = $_GET[ 'password_current' ];
-	$pass_new  = $_GET[ 'password_new' ];
-	$pass_conf = $_GET[ 'password_conf' ];
+	$pass_curr = $_POST[ 'password_current' ];
+	$pass_new  = $_POST[ 'password_new' ];
+	$pass_conf = $_POST[ 'password_conf' ];
 
 	// Sanitise current password input
 	$pass_curr = stripslashes( $pass_curr );

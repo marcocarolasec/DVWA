@@ -10,38 +10,22 @@ if( isset( $_COOKIE[ 'id' ] ) ) {
 
 	switch ($_DVWA['SQLI_DB']) {
 		case MYSQL:
-			// Check database
-			$query  = "SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;";
-			try {
-				$result = mysqli_query($GLOBALS["___mysqli_ston"],  $query ); // Removed 'or die' to suppress mysql errors
-			} catch (Exception $e) {
-				$result = false;
-			}
-
-			$exists = false;
-			if ($result !== false) {
-				// Get results
-				try {
-					$exists = (mysqli_num_rows( $result ) > 0); // The '@' character suppresses errors
-				} catch(Exception $e) {
-					$exists = false;
-				}
-			}
-
-			((is_null($___mysqli_res = mysqli_close($GLOBALS["___mysqli_ston"]))) ? false : $___mysqli_res);
+			$stmt = $db->prepare( 'SELECT COUNT(*) FROM users WHERE user_id = (:id);' );
+			$stmt->bindValue( ':id', $id, PDO::PARAM_INT );
+			$stmt->execute();
+			$exists = ((int) $stmt->fetchColumn() === 1);
 			break;
 		case SQLITE:
 			global $sqlite_db_connection;
 
-			$query  = "SELECT first_name, last_name FROM users WHERE user_id = '$id' LIMIT 1;";
-			try {
-				$results = $sqlite_db_connection->query($query);
-				$row = $results->fetchArray();
-				$exists = $row !== false;
-			} catch(Exception $e) {
-				$exists = false;
-			}
-
+			$stmt = $sqlite_db_connection->prepare(
+				'SELECT COUNT(*) AS count FROM users WHERE user_id = :id;'
+			);
+			$stmt->bindValue( ':id', $id, SQLITE3_INTEGER );
+			$result = $stmt->execute();
+			$row = $result->fetchArray( SQLITE3_ASSOC );
+			$exists = ((int) $row['count'] === 1);
+			$result->finalize();
 			break;
 	}
 
@@ -50,11 +34,6 @@ if( isset( $_COOKIE[ 'id' ] ) ) {
 		$html .= '<pre>User ID exists in the database.</pre>';
 	}
 	else {
-		// Might sleep a random amount
-		if( rand( 0, 5 ) == 3 ) {
-			sleep( rand( 2, 4 ) );
-		}
-
 		// User wasn't found, so the page wasn't!
 		header( $_SERVER[ 'SERVER_PROTOCOL' ] . ' 404 Not Found' );
 

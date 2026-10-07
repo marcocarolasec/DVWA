@@ -1,6 +1,7 @@
 <?php
 
 if( isset( $_POST[ 'Upload' ] ) ) {
+	checkToken( $_POST[ 'user_token' ] ?? '', $_SESSION[ 'session_token' ], 'index.php' );
 
 	// File information
 	$uploaded_name = $_FILES[ 'uploaded' ][ 'name' ];
@@ -56,6 +57,8 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 		$html .= '<pre>Your image was not uploaded. We can only accept JPEG or PNG images.</pre>';
 	}
 }
+
+generateSessionToken();
 
 
 ?>

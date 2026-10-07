@@ -12,6 +12,11 @@ $page[ 'help_button' ]   = 'authbypass';
 $page[ 'source_button' ] = 'authbypass';
 dvwaDatabaseConnect();
 
+if (dvwaCurrentUser() != "admin") {
+	http_response_code(403);
+	exit('Access denied');
+}
+
 $method            = 'GET';
 $vulnerabilityFile = '';
 switch( dvwaSecurityLevelGet() ) {
