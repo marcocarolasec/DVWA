@@ -1,7 +1,4 @@
 <?php
-http_response_code(403);
-exit('Legacy vulnerable level disabled');
-
 // The page we wish to display
 $file = $_GET[ 'page' ] ?? '';
 

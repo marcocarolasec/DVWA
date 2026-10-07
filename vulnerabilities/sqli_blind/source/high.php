@@ -1,7 +1,4 @@
 <?php
-http_response_code(403);
-exit('Legacy vulnerable level disabled');
-
 if( isset( $_COOKIE[ 'id' ] ) ) {
 	// Get input
 	$id = filter_var( $_COOKIE[ 'id' ], FILTER_VALIDATE_INT );

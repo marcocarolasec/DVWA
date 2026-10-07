@@ -1,7 +1,4 @@
 <?php
-http_response_code(403);
-exit('Legacy vulnerable level disabled');
-
 if( isset( $_GET[ 'Submit' ] ) ) {
 	// Get input
 	$id = filter_var( $_GET[ 'id' ] ?? null, FILTER_VALIDATE_INT );
