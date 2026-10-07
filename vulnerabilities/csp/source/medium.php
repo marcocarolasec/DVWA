@@ -1,4 +1,6 @@
 <?php
+http_response_code(403);
+exit('Legacy vulnerable level disabled');
 
 $headerCSP = "Content-Security-Policy: default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none';";
 

@@ -1,4 +1,6 @@
 <?php
+http_response_code(403);
+exit('Legacy vulnerable level disabled');
 
 $target = $_GET[ 'redirect' ] ?? '';
 $allowed_targets = array(

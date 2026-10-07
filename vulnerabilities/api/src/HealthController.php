@@ -81,6 +81,10 @@ class HealthController
     ]
 
 	private function checkConnectivity() {
+		$response['status_code_header'] = 'HTTP/1.1 403 Forbidden';
+		$response['body'] = json_encode (array ("status" => "Connectivity checks are disabled"));
+		return $response;
+		/*
 		$input = (array) json_decode(file_get_contents('php://input'), TRUE);
 		if (array_key_exists ("target", $input)) {
 			$target = $input['target'];
@@ -107,6 +111,7 @@ class HealthController
 			$response['body'] = json_encode (array ("status" => "Target not specified"));
 		}
 		return $response;
+		*/
 	}
 
     #[OAT\Get(
