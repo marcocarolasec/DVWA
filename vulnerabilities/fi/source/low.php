@@ -11,10 +11,7 @@ $configFileNames = [
 ];
 
 if( !is_string($file) || !in_array($file, $configFileNames, true) ) {
-    // This isn't the page we want!
-    http_response_code(400);
-    echo "ERROR: File not found!";
-    exit;
+    $file = 'include.php';
 }
 
 ?>

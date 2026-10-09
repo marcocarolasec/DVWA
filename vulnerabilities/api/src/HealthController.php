@@ -85,7 +85,7 @@ class HealthController
 		if (array_key_exists ("target", $input)) {
 			$target = $input['target'];
 
-			if (!is_string($target) || filter_var($target, FILTER_VALIDATE_IP) === false) {
+			if (!is_string($target) || !preg_match('/^(?:[A-Za-z0-9](?:[A-Za-z0-9.-]{0,251}[A-Za-z0-9])?|(?:\\d{1,3}\\.){3}\\d{1,3})$/', $target)) {
 				$response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
 				$response['body'] = json_encode (array ("status" => "Invalid target"));
 				return $response;

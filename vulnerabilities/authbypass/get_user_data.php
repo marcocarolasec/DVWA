@@ -6,8 +6,7 @@ dvwaDatabaseConnect();
 
 // User management data is restricted to administrators at every security level.
 if (dvwaCurrentUser() != "admin") {
-	http_response_code(403);
-	print json_encode (array ("result" => "fail", "error" => "Access denied"));
+	print json_encode (array ());
 	exit;
 }
 

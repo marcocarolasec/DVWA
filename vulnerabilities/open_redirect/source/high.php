@@ -1,12 +1,8 @@
 <?php
-$targets = array(
-	'1' => 'info.php?id=1',
-	'2' => 'info.php?id=2',
-);
-$id = $_GET[ 'redirect' ] ?? '';
+$target = $_GET[ 'redirect' ] ?? '';
 
-if( is_string( $id ) && isset( $targets[ $id ] ) ) {
-	header( 'Location: ' . $targets[ $id ] );
+if( is_string( $target ) && str_starts_with( $target, '/' ) && !str_starts_with( $target, '//' ) && !str_contains( $target, "\\" ) ) {
+	header( 'Location: ' . $target );
 	exit;
 }
 
