@@ -91,11 +91,22 @@ class HealthController
 				return $response;
 			}
 
-			// Avoid invoking a shell for user-controlled connectivity checks.
-			$socket = @fsockopen($target, 80, $errorNumber, $errorMessage, 2);
+			// Pass the target as an argv element so it is never interpreted by a shell.
+			$process = @proc_open(
+				array('ping', '-c', '1', '--', $target),
+				array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')),
+				$pipes
+			);
+			if (is_resource($process)) {
+				foreach ($pipes as $pipe) {
+					fclose($pipe);
+				}
+				$exitCode = proc_close($process);
+			} else {
+				$exitCode = -1;
+			}
 
-			if (is_resource($socket)) {
-				fclose($socket);
+			if ($exitCode === 0) {
 				$response['status_code_header'] = 'HTTP/1.1 200 OK';
 				$response['body'] = json_encode (array ("status" => "OK"));
 			} else {
